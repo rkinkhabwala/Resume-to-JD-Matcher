@@ -63,7 +63,8 @@ worker/
   tasks.py
 ui/
   app.py
-cli.py
+jobfit_cli/
+  cli.py
 prompts/
   v1/
     job_analysis.txt
@@ -240,7 +241,7 @@ version across all three shuffled matching runs.
 - [x] M2 — Input extraction: guarded PDF/DOCX/TXT parsing, safe job fetching, ATS/JSON-LD/generic extraction, robots/SSRF protections, and local PII redaction. Gate passes: saved fixtures and SSRF cases; full quality gate reports 35 passing tests.
 - [x] M3 — LLM layer: protocol, OpenAI Responses structured output, fake, retry/refusal/usage behavior, versioned prompts and injection boundaries. Full gate passes: 47 tests passed; the credential-gated integration test is skipped because `OPENAI_API_KEY` is unset.
 - [x] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate passes: table-driven scoring/confidence/evidence/injection/cache tests; full quality gate reports 80 passed, 1 credential-gated integration skipped.
-- [ ] M5 — CLI and evals: `jobfit analyze`, 8–10 expected-band pairs, `make eval` score/spread/cost table. Gate: CLI invocation and eval summary; report actual eval results.
+- [ ] M5 — CLI and evals: `jobfit analyze`, eight expected-band pairs, `make eval` score/spread/cost table. Implementation and local gates pass (86 passed, 1 skipped); completion is blocked pending `OPENAI_API_KEY` for the real structured call and actual eval results.
 - [ ] M6 — Async API/worker/persistence: PostgreSQL, SQLAlchemy 2, Alembic, Redis, arq, v1 submit/poll/SSE, idempotency, problem responses. Gate: API integration tests using Testcontainers, including failures.
 - [ ] M7 — Streamlit UI: complete link/paste/edit/analyze/report/download flow, API-only. Gate: local end-to-end flow via compose.
 - [ ] M8 — Production hardening: authentication, rate/cost budgets, circuit breaker, caps, security controls, history/deletion/retention, telemetry/metrics. Gate: specified auth, 429, budget, deletion and circuit-breaker tests.

@@ -50,6 +50,12 @@ class _MatchingRun:
     verification: EvidenceVerification
 
 
+@dataclass(frozen=True)
+class AnalysisOutcome:
+    report: AnalysisReport
+    run_scores: tuple[int, ...]
+
+
 class AnalysisPipeline:
     def __init__(
         self,
@@ -72,6 +78,18 @@ class AnalysisPipeline:
         job_text: str,
         job_source: JobSource,
     ) -> AnalysisReport:
+        return self.analyze_with_diagnostics(
+            resume_text,
+            job_text,
+            job_source,
+        ).report
+
+    def analyze_with_diagnostics(
+        self,
+        resume_text: str,
+        job_text: str,
+        job_source: JobSource,
+    ) -> AnalysisOutcome:
         cache_key = result_cache_key(
             resume_text,
             job_text,
@@ -82,7 +100,7 @@ class AnalysisPipeline:
         if self._cache is not None:
             cached = self._cache.get(cache_key)
             if cached is not None:
-                return cached
+                return AnalysisOutcome(report=cached, run_scores=())
 
         total_started = time.perf_counter()
         safe_resume = redact_pii(resume_text)
@@ -203,6 +221,12 @@ class AnalysisPipeline:
             )
 
         combined_usage = _sum_usage(usages)
+        estimated_cost = (
+            combined_usage.input_tokens
+            * self._settings.llm_input_price_per_million_tokens
+            + combined_usage.output_tokens
+            * self._settings.llm_output_price_per_million_tokens
+        ) / 1_000_000
         timings["scoring"] = max(
             0,
             _elapsed_ms(total_started)
@@ -227,14 +251,14 @@ class AnalysisPipeline:
                 input_tokens=combined_usage.input_tokens,
                 output_tokens=combined_usage.output_tokens,
                 total_tokens=combined_usage.total_tokens,
-                estimated_cost_usd=None,
+                estimated_cost_usd=round(estimated_cost, 8),
             ),
             timings_ms=timings,
             warnings=warnings,
         )
         if self._cache is not None:
             self._cache.set(cache_key, report)
-        return report
+        return AnalysisOutcome(report=report, run_scores=tuple(run_scores))
 
 
 def _validate_job_analysis(analysis: JobAnalysis) -> JobAnalysis:

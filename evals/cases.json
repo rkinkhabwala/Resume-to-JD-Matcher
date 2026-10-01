@@ -1,0 +1,58 @@
+[
+  {
+    "case_id": "analytics-strong",
+    "resume_text": "Senior data analyst with eight years building SQL and Python analytics. At Northstar Labs, developed dbt models in PostgreSQL, created Tableau dashboards, designed product experiments, and presented findings to executives. Earlier automated reporting and added data quality checks. Holds a statistics degree and has led warehouse migration projects.",
+    "job_text": "Senior Data Analyst. Required: eight years of analytics experience, strong SQL and Python, production data modeling, and clear communication with product leaders. The analyst owns experimentation and reporting quality. Preferred: dbt, PostgreSQL, Tableau, and experience leading warehouse migrations.",
+    "min_score": 80,
+    "max_score": 100
+  },
+  {
+    "case_id": "backend-strong",
+    "resume_text": "Backend engineer with seven years delivering Python and Java services. Built REST APIs, PostgreSQL schemas, asynchronous workers, and AWS deployments. Added automated tests, production monitoring, and incident playbooks. Worked closely with product and frontend engineers and mentored two developers. Bachelor degree in computer science.",
+    "job_text": "Backend Software Engineer. Must have five or more years building production services, Python or Java, REST API design, SQL databases, automated testing, and cloud deployment. The role owns service reliability and works in a cross-functional team. Preferred: AWS, observability, mentoring, and distributed systems experience.",
+    "min_score": 80,
+    "max_score": 100
+  },
+  {
+    "case_id": "project-manager-strong",
+    "resume_text": "Technical project manager with six years coordinating software delivery. At Cedar Works, led a twelve-person engineering and design group through quarterly releases, maintained roadmaps and budgets, and communicated risks to executives. At BrightPath, supported acceptance testing and vendor schedules. Experienced with Agile ceremonies, Jira, launch readiness, and stakeholder communication. Holds a communications degree.",
+    "job_text": "Technical Project Manager. Required: five years delivering software projects, Agile planning, risk management, clear executive status reporting, and coordination across engineering, design, and operations. The role maintains timelines, budgets, and launch readiness. Preferred: Jira, vendor management, software acceptance testing, and experience leading teams of ten or more.",
+    "min_score": 75,
+    "max_score": 100
+  },
+  {
+    "case_id": "analyst-adjacent",
+    "resume_text": "Operations reporting specialist with four years preparing monthly Excel reports and Power BI dashboards for a retail team. Tracks sales and inventory, checks data against source spreadsheets, and summarizes findings for managers. Has used basic SQL in a training course but has not built production data pipelines or worked with Python, dbt, or a cloud warehouse. Holds a business administration degree.",
+    "job_text": "Data Analyst. Must have four years of professional analytics work, advanced SQL, Python automation, and experience building tested production datasets in a cloud warehouse. The team uses dbt and partners with software engineers. Preferred: dashboarding, retail operations, inventory analysis, and communicating findings to business stakeholders.",
+    "min_score": 35,
+    "max_score": 70
+  },
+  {
+    "case_id": "cloud-partial",
+    "resume_text": "Platform engineer with three years managing Linux servers and AWS infrastructure. Created Docker images, Terraform modules, CI pipelines, and monitoring dashboards. Participated in on-call support and improved deployment scripts. Has not operated Kubernetes clusters or Azure services. Holds a computer engineering degree and communicates clearly with developers.",
+    "job_text": "Senior Cloud Platform Engineer. Required: five years of platform engineering, Kubernetes administration, Azure networking, infrastructure as code, Linux, and production incident response. The engineer will improve developer tooling and service reliability. Preferred: AWS, Docker, Terraform, CI systems, and monitoring experience.",
+    "min_score": 35,
+    "max_score": 70
+  },
+  {
+    "case_id": "artist-wrong-field",
+    "resume_text": "Graphic designer with nine years creating brand identities, editorial layouts, and marketing campaigns. Uses Adobe Illustrator, InDesign, and Photoshop, coordinates print vendors, and presents concepts to clients. Managed a small design studio and holds a fine arts degree. No software engineering, programming, database, or cloud platform experience is listed.",
+    "job_text": "Backend Engineer. Required: professional Python development, Django or FastAPI, REST APIs, SQL databases, automated testing, and cloud deployment. The engineer will review code and maintain production services. Preferred: Docker, Linux, distributed systems, and experience collaborating with product teams.",
+    "min_score": 0,
+    "max_score": 30
+  },
+  {
+    "case_id": "teacher-wrong-field",
+    "resume_text": "Secondary school English teacher with ten years designing lessons, assessing student writing, and coordinating curriculum. Mentored new teachers, communicated with families, and organized school events. Holds a master's degree in education and a teaching certificate. No machine learning, programming, statistical modeling, or production software experience is listed.",
+    "job_text": "Machine Learning Engineer. Must have Python, PyTorch, model evaluation, statistical learning, data pipelines, and experience deploying machine learning systems to production. The role partners with research and infrastructure teams. Preferred: graduate degree in computer science or statistics, cloud platforms, and model monitoring.",
+    "min_score": 0,
+    "max_score": 25
+  },
+  {
+    "case_id": "healthcare-partial",
+    "resume_text": "Clinical operations coordinator with five years supporting hospital quality programs. Maintains electronic health record reports, validates spreadsheets, tracks patient flow metrics, and shares findings with nursing and compliance teams. Uses Excel and has basic SQL exposure but no experience with Python, HL7 interfaces, or statistical modeling. Holds a public health degree and understands clinical workflows.",
+    "job_text": "Healthcare Data Analyst. Required: five years analyzing healthcare datasets, advanced SQL, Python, dashboard development, data validation, and communicating findings to clinical partners. The analyst will work with electronic health records and support quality improvement. Preferred: HL7, statistics, patient flow analysis, Excel, and a public health background.",
+    "min_score": 35,
+    "max_score": 70
+  }
+]

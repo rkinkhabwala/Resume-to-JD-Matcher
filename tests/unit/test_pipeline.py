@@ -141,6 +141,7 @@ def test_pipeline_runs_three_matchings_and_returns_median_explanation() -> None:
     assert report.usage.input_tokens == 50
     assert report.usage.output_tokens == 20
     assert report.usage.total_tokens == 70
+    assert report.usage.estimated_cost_usd == 0.000052
     assert client.call_count == 5
     assert set(report.timings_ms) == {
         "job_analysis",
@@ -163,6 +164,28 @@ def test_pipeline_runs_three_matchings_and_returns_median_explanation() -> None:
             [item["id"] for item in json.loads(unescape(tagged_requirements.group(1)))]
         )
     assert all(order != ["python", "communication"] for order in matching_orders)
+
+
+def test_diagnostics_expose_three_scores_without_changing_report() -> None:
+    client = fake_client(
+        [
+            ["met", "met"],
+            ["met", "not_met"],
+            ["not_met", "not_met"],
+        ]
+    )
+
+    outcome = AnalysisPipeline(
+        client, Settings(), model="test-model"
+    ).analyze_with_diagnostics(
+        long_resume_text(),
+        "Data Analyst role requiring Python and stakeholder communication. "
+        "The team builds analysis for product and operations.",
+        "pasted",
+    )
+
+    assert outcome.report.score == 75
+    assert outcome.run_scores == (100, 75, 0)
 
 
 def test_pipeline_redacts_pii_before_every_llm_call() -> None:

@@ -20,6 +20,9 @@ dependencies = [
     "uvicorn>=0.32.0",
 ]
 
+[project.scripts]
+jobfit = "jobfit_cli.cli:main"
+
 [dependency-groups]
 dev = [
     "mypy>=1.14.0",
@@ -28,7 +31,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["api*", "cache*", "jobfetch*", "jobfit*"]
+include = ["api*", "cache*", "evals*", "jobfetch*", "jobfit*", "jobfit_cli*"]
 
 [tool.setuptools.data-files]
 "share/jobfit/prompts/v1" = [
@@ -36,6 +39,9 @@ include = ["api*", "cache*", "jobfetch*", "jobfit*"]
     "prompts/v1/matching.txt",
     "prompts/v1/resume_analysis.txt",
 ]
+
+[tool.setuptools.package-data]
+evals = ["cases.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

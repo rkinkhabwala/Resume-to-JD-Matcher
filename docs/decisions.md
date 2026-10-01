@@ -109,3 +109,13 @@
 - **Why:** Identical text from a pasted source and a generic scrape has different
   confidence quality. Omitting source could return a cached report with incorrect
   confidence for otherwise identical input.
+
+## Evaluation token pricing
+
+- **Decision:** Estimate model cost from configurable input/output price-per-million
+  token settings, with `.env.example` defaults of $0.40/$1.60 for the sample model.
+- **Alternatives:** Query a provider pricing API; omit eval cost; embed a model-name
+  price map in the scoring code.
+- **Why:** The eval output needs a cost total, while provider prices can change and
+  compatible/Azure endpoints may differ. Operators can adjust the two settings without
+  changing deterministic score logic; the reported value remains an estimate.

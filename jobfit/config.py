@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     confidence_requirement_quality_weight: float = 0.40
     confidence_resume_quality_weight: float = 0.40
     confidence_source_quality_weight: float = 0.20
+    llm_input_price_per_million_tokens: float = 0.40
+    llm_output_price_per_million_tokens: float = 1.60
 
 
 @lru_cache
