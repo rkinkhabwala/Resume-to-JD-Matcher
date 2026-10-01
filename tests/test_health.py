@@ -121,3 +121,68 @@ def test_analysis_status_poll_tracks_completion() -> None:
     result = payload["result"]
     assert result["score"] >= 0
     assert result["confidence"]["label"] in {"Low", "Medium", "High"}
+
+
+def test_history_requires_api_key() -> None:
+    with TestClient(app) as client:
+        response = client.get("/api/v1/history")
+
+    assert response.status_code == 401
+    assert response.json()["code"] == "AUTH_REQUIRED"
+
+
+def test_rate_limit_returns_429_for_authenticated_client() -> None:
+    app.state.api_keys = {"demo-key": "demo-user"}
+    app.state.rate_limiter = {
+        "demo-user": {"requests": [time.time() - 1], "limit": 2, "window_seconds": 60}
+    }
+
+    with TestClient(app) as client:
+        first = client.post(
+            "/api/v1/analyses",
+            headers={"X-API-Key": "demo-key"},
+            data={"job_text": "Senior Python engineer with SQL and AWS."},
+            files={
+                "resume_file": (
+                    "resume.txt",
+                    "Python, SQL, AWS, five years.",
+                    "text/plain",
+                )
+            },
+        )
+        second = client.post(
+            "/api/v1/analyses",
+            headers={"X-API-Key": "demo-key"},
+            data={"job_text": "Another Python engineer role."},
+            files={
+                "resume_file": (
+                    "resume.txt",
+                    "Python, SQL, AWS, five years.",
+                    "text/plain",
+                )
+            },
+        )
+
+    assert first.status_code == 202
+    assert second.status_code == 429
+    assert second.json()["code"] == "RATE_LIMITED"
+
+
+def test_analysis_delete_hard_deletes_record() -> None:
+    app.state.api_keys = {"demo-key": "demo-user"}
+    app.state.rate_limiter = {}
+    app.state.analysis_store._jobs.clear()
+
+    record = app.state.analysis_store.create(
+        job_text="Python engineer",
+        resume_text="Python, SQL",
+    )
+
+    with TestClient(app) as client:
+        response = client.delete(
+            f"/api/v1/analyses/{record.analysis_id}",
+            headers={"X-API-Key": "demo-key"},
+        )
+
+    assert response.status_code == 200
+    assert app.state.analysis_store.get(record.analysis_id) is None

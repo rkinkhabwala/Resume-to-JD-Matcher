@@ -22,6 +22,7 @@ class AnalysisRecord:
     job_url: str | None = None
     job_text: str | None = None
     resume_text: str | None = None
+    user_id: str | None = None
 
 
 class AnalysisStore:
@@ -34,6 +35,7 @@ class AnalysisStore:
         job_url: str | None = None,
         job_text: str | None = None,
         resume_text: str | None = None,
+        user_id: str | None = None,
     ) -> AnalysisRecord:
         record = AnalysisRecord(
             analysis_id=str(uuid4()),
@@ -43,12 +45,25 @@ class AnalysisStore:
             job_url=job_url,
             job_text=job_text,
             resume_text=resume_text,
+            user_id=user_id,
         )
         self._jobs[record.analysis_id] = record
         return record
 
     def get(self, analysis_id: str) -> AnalysisRecord | None:
         return self._jobs.get(analysis_id)
+
+    def list_for_user(self, user_id: str) -> list[AnalysisRecord]:
+        return [record for record in self._jobs.values() if record.user_id == user_id]
+
+    def delete(self, analysis_id: str, *, user_id: str | None = None) -> bool:
+        record = self._jobs.get(analysis_id)
+        if record is None:
+            return False
+        if user_id is not None and record.user_id not in {None, user_id}:
+            return False
+        del self._jobs[analysis_id]
+        return True
 
     def update(
         self,
