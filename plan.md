@@ -235,7 +235,7 @@ version across all three shuffled matching runs.
 - [x] M1 — Skeleton: uv project, config, quality tools, JSON request-ID logging,
   FastAPI health/readiness, CI. Local gate passes: `uv run ruff check . && uv run ruff format --check . && uv run mypy jobfit && uv run pytest`; uvicorn `/health` returns 200. GitHub Actions awaits a remote push.
 - [x] M2 — Input extraction: guarded PDF/DOCX/TXT parsing, safe job fetching, ATS/JSON-LD/generic extraction, robots/SSRF protections, and local PII redaction. Gate passes: saved fixtures and SSRF cases; full quality gate reports 35 passing tests.
-- [ ] M3 — LLM layer: protocol, OpenAI Responses structured output, fake, retry/refusal/usage behavior, versioned prompts and injection boundaries. Gate: fake-client unit coverage and a credential-gated integration test.
+- [x] M3 — LLM layer: protocol, OpenAI Responses structured output, fake, retry/refusal/usage behavior, versioned prompts and injection boundaries. Full gate passes: 47 tests passed; the credential-gated integration test is skipped because `OPENAI_API_KEY` is unset.
 - [ ] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate: table-driven math, edge cases and injection tests; run the required full check command.
 - [ ] M5 — CLI and evals: `jobfit analyze`, 8–10 expected-band pairs, `make eval` score/spread/cost table. Gate: CLI invocation and eval summary; report actual eval results.
 - [ ] M6 — Async API/worker/persistence: PostgreSQL, SQLAlchemy 2, Alembic, Redis, arq, v1 submit/poll/SSE, idempotency, problem responses. Gate: API integration tests using Testcontainers, including failures.

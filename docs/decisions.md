@@ -75,3 +75,14 @@
 - **Why:** The spec requires respecting robots.txt and forbids bypassing site controls.
   Failing closed avoids scraping when permission cannot be established, while 404/410
   follows the convention that no robots rules are published.
+
+## Azure OpenAI selection
+
+- **Decision:** Select the SDK client with `OPENAI_API_TYPE=openai|azure`; use
+  `OPENAI_BASE_URL` for the OpenAI-compatible base URL or Azure endpoint and
+  `OPENAI_API_VERSION` for Azure's API version.
+- **Alternatives:** Guess Azure from the base URL hostname; add separate Azure-specific
+  endpoint/key settings.
+- **Why:** The spec requires both OpenAI-compatible base URLs and the official
+  `AzureOpenAI` client behind one interface. An explicit provider avoids brittle URL
+  inference while reusing the requested API key and endpoint settings.
