@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from starlette.middleware.base import RequestResponseEndpoint
 
 from api.store import analysis_store
+from jobfetch.fetcher import JobFetcher, JobFetchError
 from jobfit.config import Settings, get_settings
 from jobfit.logging_config import configure_logging
 from worker.tasks import run_analysis
@@ -43,6 +44,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     configure_logging(app_settings.log_level)
     app = FastAPI(title="JobFit API", version="0.1.0")
     app.state.analysis_store = analysis_store
+    app.state.job_fetcher = JobFetcher()
 
     @app.middleware("http")
     async def add_request_context(
@@ -112,6 +114,33 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/ready", tags=["health"])
     async def ready() -> dict[str, object]:
         return {"status": "ready", "checks": {"app": "ok", "config": "ok"}}
+
+    @app.post("/api/v1/extract-job", tags=["job"])
+    async def extract_job(request: Request) -> dict[str, Any]:
+        payload = await request.json()
+        url = payload.get("url") if isinstance(payload, dict) else None
+        if not isinstance(url, str) or not url.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="A job URL is required for extraction.",
+            )
+        try:
+            fetched = app.state.job_fetcher.fetch(url)
+        except JobFetchError as exc:
+            return _problem_response(
+                request,
+                status_code=400,
+                code=exc.code,
+                title="Job link unreadable",
+                detail=exc.args[0] if exc.args else str(exc),
+            )
+
+        return {
+            "title": fetched.title,
+            "text": fetched.text,
+            "source": fetched.source,
+            "url": fetched.url,
+        }
 
     @app.post("/api/v1/analyses", status_code=202, tags=["analyses"])
     async def create_analysis(

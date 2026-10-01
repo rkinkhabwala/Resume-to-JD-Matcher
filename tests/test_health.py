@@ -1,9 +1,18 @@
 import time
+from dataclasses import dataclass
 from uuid import UUID
 
 from fastapi.testclient import TestClient
 
 from api.app import app
+
+
+@dataclass
+class _FakeFetchedJob:
+    title: str | None
+    text: str
+    source: str
+    url: str
 
 
 def test_health_returns_ok_and_request_id() -> None:
@@ -35,6 +44,32 @@ def test_invalid_request_id_is_replaced() -> None:
     assert response.status_code == 200
     assert response.headers["X-Request-ID"] != "not-a-uuid"
     UUID(response.headers["X-Request-ID"])
+
+
+def test_extract_job_endpoint_returns_extracted_text(monkeypatch) -> None:
+    def _fake_fetch(self, url: str):
+        assert url == "https://example.com/job"
+        return _FakeFetchedJob(
+            title="Senior Python Engineer",
+            text="Build Python services with SQL and AWS.",
+            source="json_ld",
+            url=url,
+        )
+
+    monkeypatch.setattr("api.app.JobFetcher.fetch", _fake_fetch)
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/v1/extract-job",
+            json={"url": "https://example.com/job"},
+        )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["title"] == "Senior Python Engineer"
+    assert payload["text"].startswith("Build Python")
+    assert payload["source"] == "json_ld"
+    assert payload["url"] == "https://example.com/job"
 
 
 def test_async_analysis_submission_returns_accepted_status() -> None:
