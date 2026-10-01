@@ -1,0 +1,59 @@
+services:
+  api:
+    build:
+      context: .
+    command: uv run uvicorn api.app:app --host 0.0.0.0 --port 8000
+    environment:
+      JOBFIT_API_KEY: ${JOBFIT_API_KEY:-demo-key}
+      JOBFIT_API_USER: ${JOBFIT_API_USER:-demo-user}
+      JOBFIT_DAILY_BUDGET_USD: ${JOBFIT_DAILY_BUDGET_USD:-25.0}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      LLM_MODEL: ${LLM_MODEL:-gpt-4.1-mini}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - postgres
+
+  worker:
+    build:
+      context: .
+    command: uv run python -c "import time; print('JobFit worker started'); time.sleep(3600)"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      LLM_MODEL: ${LLM_MODEL:-gpt-4.1-mini}
+    depends_on:
+      - redis
+      - postgres
+
+  ui:
+    build:
+      context: .
+    command: uv run streamlit run streamlit_app.py --server.address 0.0.0.0 --server.port 8501
+    environment:
+      JOBFIT_API_BASE_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: jobfit
+      POSTGRES_USER: jobfit
+      POSTGRES_PASSWORD: jobfit
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
