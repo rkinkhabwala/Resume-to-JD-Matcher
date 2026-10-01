@@ -1,0 +1,25 @@
+Jordan Rivera
+Senior Data Analyst
+Email: jordan.rivera@example.com | Phone: 415-555-0188
+
+Summary
+Data analyst with eight years of experience building reliable reporting products,
+developing SQL data models, and communicating findings to product and operations
+teams. Experienced with Python, PostgreSQL, dbt, Tableau, experiment design, and
+cloud data platforms. Led migration projects and mentored analysts across teams.
+
+Experience
+Senior Data Analyst, Northstar Labs, 2021-03 to Present
+- Built a dbt and PostgreSQL analytics warehouse used by product and finance teams.
+- Developed Python pipelines and Tableau dashboards for customer retention metrics.
+- Designed controlled experiments and presented findings to executive stakeholders.
+
+Data Analyst, Harbor Systems, 2018-06 to 2021-02
+- Automated recurring reports with SQL and Python, reducing manual work by 12 hours weekly.
+- Partnered with engineers to define data quality checks and warehouse conventions.
+
+Education
+Bachelor of Science in Statistics, Pacific State University, 2018
+
+Skills
+Python, SQL, PostgreSQL, dbt, Tableau, experiment design, data modeling, communication

@@ -1,0 +1,23 @@
+Taylor Morgan
+Technical Project Manager
+Email: taylor.morgan@example.org | Phone: 212-555-0142
+
+Summary
+Technical project manager with six years of experience delivering internal software
+and customer-facing services. Skilled in roadmap planning, Agile facilitation, risk
+management, vendor coordination, and stakeholder communication. Comfortable translating
+product requirements into milestones and coordinating engineering, design, and support.
+
+Experience
+Technical Project Manager, Cedar Works, 2022-01 to Present
+- Coordinated a cross-functional team of twelve through quarterly product releases.
+- Maintained delivery plans, budgets, risk registers, and executive status reports.
+
+Project Coordinator, BrightPath, 2019-05 to 2021-12
+- Supported software launches and managed vendor schedules and acceptance testing.
+
+Education
+Bachelor of Arts in Communications, Lakeview College, 2019
+
+Skills
+Project planning, Agile, Jira, risk management, budgeting, vendor management

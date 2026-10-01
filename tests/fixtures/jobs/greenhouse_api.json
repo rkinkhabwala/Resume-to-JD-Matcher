@@ -1,0 +1,5 @@
+{
+  "title": "Data Engineer",
+  "location": {"name": "Remote"},
+  "content": "<p>Acme Analytics is seeking a data engineer to build reliable systems for product and operations teams. You will create maintainable data pipelines, develop tested SQL models, and partner with software engineers to define clear data contracts.</p><p>Required qualifications include Python, SQL, cloud data warehouses, production pipeline ownership, and clear written communication. Preferred experience includes dbt, orchestration tools, and analytics engineering in a collaborative environment.</p>"
+}

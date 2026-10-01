@@ -1,0 +1,32 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 955 >>
+stream
+BT /F1 11 Tf 72 750 Td (Morgan Lee - Product Analyst) Tj 0 -16 Td (Product analyst with six years of experience building SQL reporting, Python data workflows,) Tj 0 -16 Td (and operational dashboards for growing software teams.) Tj 0 -16 Td () Tj 0 -16 Td (Experience) Tj 0 -16 Td (Redwood Systems - Product Analyst - 2021 to Present) Tj 0 -16 Td (Designed dbt models and PostgreSQL reporting tables, documented metric definitions,) Tj 0 -16 Td (and partnered with product managers on experiments.) Tj 0 -16 Td (Pinecone Studio - Data Analyst - 2018 to 2021) Tj 0 -16 Td (Automated weekly reports, improved data quality checks, and presented findings to) Tj 0 -16 Td (engineering and customer success stakeholders.) Tj 0 -16 Td () Tj 0 -16 Td (Education) Tj 0 -16 Td (Bachelor of Science in Information Systems, North Valley University.) Tj 0 -16 Td (Skills: Python, SQL, PostgreSQL, dbt, Tableau, experimentation, analytics communication.) Tj 0 -16 Td ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000241 00000 n
+0000000311 00000 n
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1317
+%%EOF

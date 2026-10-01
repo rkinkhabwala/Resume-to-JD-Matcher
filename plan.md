@@ -36,7 +36,7 @@ jobfit/
     report.py               # public analysis report models
   extraction/
     resume.py               # PDF, DOCX, TXT validation and extraction
-    job.py                  # JSON-LD, ATS, generic extraction contracts
+    job.py                  # pure JSON-LD and ATS payload parsing
     pii.py                  # local PII redaction
   llm/
     protocol.py             # LLMClient protocol and usage value object
@@ -54,6 +54,8 @@ jobfit/
 api/
   app.py
   routes/
+jobfetch/
+  fetcher.py                # httpx, robots.txt, SSRF and trafilatura adapter
 worker/
   app.py
   tasks.py
@@ -232,7 +234,7 @@ version across all three shuffled matching runs.
 - [x] M0 — Plan drafted and approved.
 - [x] M1 — Skeleton: uv project, config, quality tools, JSON request-ID logging,
   FastAPI health/readiness, CI. Local gate passes: `uv run ruff check . && uv run ruff format --check . && uv run mypy jobfit && uv run pytest`; uvicorn `/health` returns 200. GitHub Actions awaits a remote push.
-- [ ] M2 — Input extraction: guarded PDF/DOCX/TXT parsing, safe job fetching, ATS/JSON-LD/generic extraction, robots/SSRF protections, and local PII redaction. Gate: saved fixtures and SSRF tests.
+- [x] M2 — Input extraction: guarded PDF/DOCX/TXT parsing, safe job fetching, ATS/JSON-LD/generic extraction, robots/SSRF protections, and local PII redaction. Gate passes: saved fixtures and SSRF cases; full quality gate reports 35 passing tests.
 - [ ] M3 — LLM layer: protocol, OpenAI Responses structured output, fake, retry/refusal/usage behavior, versioned prompts and injection boundaries. Gate: fake-client unit coverage and a credential-gated integration test.
 - [ ] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate: table-driven math, edge cases and injection tests; run the required full check command.
 - [ ] M5 — CLI and evals: `jobfit analyze`, 8–10 expected-band pairs, `make eval` score/spread/cost table. Gate: CLI invocation and eval summary; report actual eval results.

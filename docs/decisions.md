@@ -55,3 +55,23 @@
 - **Why:** The spec requires deterministic coverage and discourages unrequested
   dependencies. Limiting terms to analyzed skill requirements is auditable and avoids
   inflating coverage with generic job-description words.
+
+## Job network adapter boundary
+
+- **Decision:** Put HTTP fetching, DNS/SSRF checks, robots.txt handling, and generic
+  page extraction in top-level `jobfetch/`; keep byte-based resume parsing, PII
+  redaction, and pure payload parsing in `jobfit/`.
+- **Alternatives:** Put all extraction under `jobfit/`; move all document parsing to
+  adapters.
+- **Why:** The core must remain free of web/network imports, and deterministic
+  document/domain parsing is reusable across CLI, API, and worker callers.
+
+## Unavailable robots.txt
+
+- **Decision:** Fail closed when robots.txt cannot be fetched or returns a non-success
+  status other than 404/410; a missing robots file permits the fetch.
+- **Alternatives:** Treat every retrieval failure as no restrictions; retry with
+  another user agent.
+- **Why:** The spec requires respecting robots.txt and forbids bypassing site controls.
+  Failing closed avoids scraping when permission cannot be established, while 404/410
+  follows the convention that no robots rules are published.
