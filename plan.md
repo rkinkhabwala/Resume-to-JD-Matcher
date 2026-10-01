@@ -230,8 +230,8 @@ version across all three shuffled matching runs.
 ## Milestone Checklist
 
 - [x] M0 — Plan drafted and approved.
-- [ ] M1 — Skeleton: uv project, config, quality tools, JSON request-ID logging,
-  FastAPI health/readiness, CI. Gate: `uv run ruff check . && uv run ruff format --check . && uv run mypy jobfit && uv run pytest`, then verify uvicorn `/health`.
+- [x] M1 — Skeleton: uv project, config, quality tools, JSON request-ID logging,
+  FastAPI health/readiness, CI. Local gate passes: `uv run ruff check . && uv run ruff format --check . && uv run mypy jobfit && uv run pytest`; uvicorn `/health` returns 200. GitHub Actions awaits a remote push.
 - [ ] M2 — Input extraction: guarded PDF/DOCX/TXT parsing, safe job fetching, ATS/JSON-LD/generic extraction, robots/SSRF protections, and local PII redaction. Gate: saved fixtures and SSRF tests.
 - [ ] M3 — LLM layer: protocol, OpenAI Responses structured output, fake, retry/refusal/usage behavior, versioned prompts and injection boundaries. Gate: fake-client unit coverage and a credential-gated integration test.
 - [ ] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate: table-driven math, edge cases and injection tests; run the required full check command.
