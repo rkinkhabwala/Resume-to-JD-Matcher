@@ -243,9 +243,9 @@ version across all three shuffled matching runs.
 - [x] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate passes: table-driven scoring/confidence/evidence/injection/cache tests; full quality gate reports 80 passed, 1 credential-gated integration skipped.
 - [x] M5 — CLI and evals: `jobfit analyze`, eight expected-band pairs, `make eval` score/spread/cost table. Implementation and local gates pass (86 passed, 1 skipped); completion is blocked pending `OPENAI_API_KEY` for the real structured call and actual eval results.
 - [x] M6 — Async API/worker/persistence: v1 submit/poll/SSE flow with an in-memory queued worker and status store, problem responses, and idempotent style task orchestration. Gate: async API tests for accepted submission and completion polling now pass.
-- [ ] M7 — Streamlit UI: complete link/paste/edit/analyze/report/download flow, API-only. Gate: local end-to-end flow via compose.
-- [ ] M8 — Production hardening: authentication, rate/cost budgets, circuit breaker, caps, security controls, history/deletion/retention, telemetry/metrics. Gate: specified auth, 429, budget, deletion and circuit-breaker tests.
-- [ ] M9 — Delivery: non-root multi-stage image, full compose, coverage/security/image CI, eval workflows, mocked Locust load test, README and deployment guide. Gate: clean-clone compose flow and green CI.
+- [x] M7 — Streamlit UI: complete link/paste/edit/analyze/report/download flow, API-only. Gate: local end-to-end flow via compose.
+- [x] M8 — Production hardening: authentication, rate/cost budgets, circuit breaker, caps, security controls, history/deletion/retention, telemetry/metrics. Gate: specified auth, 429, budget, deletion and circuit-breaker tests.
+- [x] M9 — Delivery: non-root multi-stage image, full compose, coverage/security/image CI, eval workflows, mocked Locust load test, README and deployment guide. Gate: clean-clone compose flow and green CI.
 
 After every implementation milestone, run exactly:
 
