@@ -257,6 +257,29 @@ def test_azure_settings_select_azure_sdk_client(
     assert captured["max_retries"] == 3
 
 
+def test_blank_base_url_uses_openai_default_endpoint(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, object] = {}
+
+    class OpenAIStub:
+        def __init__(self, **kwargs: object) -> None:
+            captured.update(kwargs)
+            self.responses = FakeResponses([])
+
+    monkeypatch.setattr(openai_module, "OpenAI", OpenAIStub)
+    client = create_llm_client(
+        Settings(
+            openai_api_key="test-key",
+            openai_base_url="",
+        )
+    )
+
+    assert isinstance(client, OpenAIResponsesClient)
+    assert captured["api_key"] == "test-key"
+    assert captured["base_url"] == "https://api.openai.com/v1"
+
+
 @pytest.mark.integration
 @pytest.mark.skipif(
     not os.environ.get("OPENAI_API_KEY"),

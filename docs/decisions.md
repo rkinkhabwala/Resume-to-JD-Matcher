@@ -110,6 +110,19 @@
   confidence quality. Omitting source could return a cached report with incorrect
   confidence for otherwise identical input.
 
+## Async API worker persistence milestone
+
+- **Decision:** Keep the M6 async job queue and status store in an in-memory registry
+  (`api/store.py`) and process work through a lightweight background task in
+  `worker/tasks.py`, rather than adding Redis or Postgres dependencies at this stage.
+- **Alternatives:** Delay the async API until the production stack is fully provisioned;
+  introduce Redis or SQLAlchemy immediately.
+- **Why:** The milestone is specifically about the async API contract, polling flow,
+  and worker fan-out, while the project’s architecture explicitly keeps the core
+  domain package free of database imports. The in-memory implementation is therefore
+  the simplest acceptable staging model before the full production persistence stack
+  is introduced later.
+
 ## Evaluation token pricing
 
 - **Decision:** Estimate model cost from configurable input/output price-per-million

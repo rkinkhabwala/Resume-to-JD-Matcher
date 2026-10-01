@@ -128,10 +128,10 @@ def create_llm_client(settings: Settings) -> OpenAIResponsesClient:
     if not settings.openai_api_key:
         raise LLMConfigurationError("OPENAI_API_KEY is required for LLM analysis.")
 
-    base_url = settings.openai_base_url or None
+    base_url = (settings.openai_base_url or "").strip() or "https://api.openai.com/v1"
     sdk_client: OpenAI | AzureOpenAI
     if settings.openai_api_type == "azure":
-        if base_url is None:
+        if not base_url or base_url == "https://api.openai.com/v1":
             raise LLMConfigurationError(
                 "OPENAI_BASE_URL must contain the Azure endpoint when using Azure."
             )
