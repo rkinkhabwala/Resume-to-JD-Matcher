@@ -13,16 +13,19 @@
 ## Experience calculation and enforcement
 
 - **Decision:** Compute the union of dated role intervals in whole months, avoiding
-  overlap double-counting. For a numeric `min_years`, deterministically set that
-  requirement to `not_met` when documented total experience is below the threshold.
-  Missing/invalid dates do not contribute; an open end date extends through the
-  current month.
-- **Alternatives:** Sum each role independently; ask the LLM to estimate years; use
-  experience only as explanatory context without changing verdicts.
+  overlap double-counting. An open end date extends through the current month.
+  Deterministically set a numeric `min_years` requirement to `not_met` only when all
+  listed role start dates are parseable and the documented total is below threshold;
+  otherwise leave the evidence-based verdict unchanged.
+- **Alternatives:** Sum each role independently; ask the LLM to estimate years; count
+  missing dates as zero experience and force `not_met`; never use computed years to
+  change a verdict.
 - **Why:** Python, not the LLM, must compute years. Unioning intervals is conservative
   and prevents concurrent jobs from inflating experience. A below-threshold rule makes
   the stated numeric requirement operational and allows the specified knockout cap to
-  work. Domain relevance remains an evidence-backed matching judgment because the
+  work when evidence is complete. Missing dates do not prove a shortfall; preserving
+  the model's evidence-based verdict in that case avoids contradicting the `unclear`
+  rule. Domain relevance remains an evidence-backed matching judgment because the
   spec does not define a deterministic role-to-requirement mapping.
 
 ## Three-run report selection
@@ -86,3 +89,23 @@
 - **Why:** The spec requires both OpenAI-compatible base URLs and the official
   `AzureOpenAI` client behind one interface. An explicit provider avoids brittle URL
   inference while reusing the requested API key and endpoint settings.
+
+## SQLite cache adapter boundary
+
+- **Decision:** Keep a storage-neutral cache protocol and key helper in `jobfit/`, but
+  implement SQLite in a top-level adapter outside the core.
+- **Alternatives:** Import `sqlite3` from `jobfit/cache`; defer caching until Postgres
+  and Redis are introduced.
+- **Why:** M4 requires an SQLite result cache while the architecture rule forbids DB
+  imports in `jobfit/`. The adapter satisfies both and keeps scoring independent of
+  storage.
+
+## Cache source key
+
+- **Decision:** Include job source in addition to resume text, job text, model, and
+  prompt version when computing the result-cache key.
+- **Alternatives:** Use only the four named values from the spec; invalidate all cache
+  entries whenever source policy changes.
+- **Why:** Identical text from a pasted source and a generic scrape has different
+  confidence quality. Omitting source could return a cached report with incorrect
+  confidence for otherwise identical input.

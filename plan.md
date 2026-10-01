@@ -18,7 +18,7 @@ CLI ──> jobfit core (local synchronous analysis)
 
 `jobfit/` is the framework-independent domain package: schemas, parsing/scoring
 contracts, confidence, evidence verification, and orchestration. It must not import
-FastAPI, Streamlit, SQLAlchemy, Redis, or arq. The API, worker, CLI, and UI depend on
+FastAPI, Streamlit, SQLAlchemy, SQLite, Redis, or arq. The API, worker, CLI, and UI depend on
 the core; the core never depends on those surfaces. File/network adapters are outside
 the core. The CLI calls the core directly. API submissions are asynchronous from M6;
 the UI communicates only with the API.
@@ -49,13 +49,15 @@ jobfit/
     score.py                # weighted score, knockout cap, keyword coverage
     confidence.py           # confidence signals and reasons
   cache/
-    protocol.py
-    sqlite.py               # M4 local result cache
+    protocol.py             # storage-neutral result cache contract
+    key.py                  # deterministic input/model/prompt hash
 api/
   app.py
   routes/
 jobfetch/
   fetcher.py                # httpx, robots.txt, SSRF and trafilatura adapter
+cache/
+  sqlite_cache.py           # SQLite adapter; never imported by jobfit
 worker/
   app.py
   tasks.py
@@ -148,11 +150,12 @@ cap still cannot raise it. Example of the cap binding: three must-haves (`met`, 
 Experience is the union of dated role intervals, to avoid double-counting overlapping
 jobs. An open end date means the current month; missing/invalid dates add no duration.
 For an explicit `min_years`, compare the requirement to documented total experience
-in whole months (`months >= min_years * 12`). If below minimum, the matching verdict
-for that requirement is deterministically set to `not_met`; the score and knockout
-cap then follow the normal rules. This conservative policy is recorded in
-`docs/decisions.md`; role relevance remains part of the evidence-backed LLM judgment,
-not a guessed Python classification.
+in whole months (`months >= min_years * 12`). Only enforce a below-minimum result when
+all listed role start dates are parseable; incomplete dates cannot prove a shortfall,
+so leave the evidence-based verdict unchanged and lower input-quality confidence. If
+dates are complete and total experience is below the threshold, set the requirement
+to `not_met`; the score and knockout cap then follow the normal rules. Role relevance
+remains part of the evidence-backed LLM judgment, not a guessed Python classification.
 
 Hard-skill keyword coverage is deterministic: use distinct normalized tokens and
 phrases from `skill` requirements, remove a small fixed stop-word set, and count a
@@ -236,7 +239,7 @@ version across all three shuffled matching runs.
   FastAPI health/readiness, CI. Local gate passes: `uv run ruff check . && uv run ruff format --check . && uv run mypy jobfit && uv run pytest`; uvicorn `/health` returns 200. GitHub Actions awaits a remote push.
 - [x] M2 — Input extraction: guarded PDF/DOCX/TXT parsing, safe job fetching, ATS/JSON-LD/generic extraction, robots/SSRF protections, and local PII redaction. Gate passes: saved fixtures and SSRF cases; full quality gate reports 35 passing tests.
 - [x] M3 — LLM layer: protocol, OpenAI Responses structured output, fake, retry/refusal/usage behavior, versioned prompts and injection boundaries. Full gate passes: 47 tests passed; the credential-gated integration test is skipped because `OPENAI_API_KEY` is unset.
-- [ ] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate: table-driven math, edge cases and injection tests; run the required full check command.
+- [x] M4 — Scoring pipeline: three shuffled runs, quote verification, date-derived experience, deterministic score/caps/keywords/confidence, final report, SQLite cache. Gate passes: table-driven scoring/confidence/evidence/injection/cache tests; full quality gate reports 80 passed, 1 credential-gated integration skipped.
 - [ ] M5 — CLI and evals: `jobfit analyze`, 8–10 expected-band pairs, `make eval` score/spread/cost table. Gate: CLI invocation and eval summary; report actual eval results.
 - [ ] M6 — Async API/worker/persistence: PostgreSQL, SQLAlchemy 2, Alembic, Redis, arq, v1 submit/poll/SSE, idempotency, problem responses. Gate: API integration tests using Testcontainers, including failures.
 - [ ] M7 — Streamlit UI: complete link/paste/edit/analyze/report/download flow, API-only. Gate: local end-to-end flow via compose.
@@ -257,9 +260,9 @@ and saved fixtures only.
 ## Decisions and Open Questions
 
 Implementation decisions and their alternatives/rationale are recorded in
-[`docs/decisions.md`](docs/decisions.md). The initial resolved choices are confidence
-weights, experience calculation, representative-run report selection, API versioning,
-and the fixed hard-skill coverage interpretation.
+[`docs/decisions.md`](docs/decisions.md). Resolved choices include confidence weights,
+experience calculation, representative-run report selection, API versioning, the
+hard-skill coverage interpretation, and adapter boundaries.
 
 Open questions retained for implementation-time verification, not M0 blockers:
 
